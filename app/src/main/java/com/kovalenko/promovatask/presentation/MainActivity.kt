@@ -1,4 +1,4 @@
-package com.kovalenko.promovatask
+package com.kovalenko.promovatask.presentation
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
