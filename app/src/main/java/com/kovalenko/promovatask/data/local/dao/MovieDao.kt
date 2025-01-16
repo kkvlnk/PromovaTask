@@ -17,7 +17,7 @@ interface MovieDao {
     suspend fun getAllMovies(): List<MovieEntity>
 
     @Query("SELECT * FROM movies")
-    suspend fun getMoviesPaging(): PagingSource<Int, MovieEntity>
+    fun getMoviesPaging(): PagingSource<Int, MovieEntity>
 
     @Query("SELECT * FROM movies WHERE isLiked = 1")
     fun getLikedMovies(): Flow<List<MovieEntity>>
