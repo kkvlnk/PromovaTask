@@ -1,5 +1,7 @@
 package com.kovalenko.promovatask.data.remote
 
+import com.kovalenko.promovatask.data.remote.model.GenreDto
+import com.kovalenko.promovatask.data.remote.model.GenresResponse
 import com.kovalenko.promovatask.data.remote.model.MovieDto
 import com.kovalenko.promovatask.data.remote.model.PaginatedResponse
 import io.ktor.client.HttpClient
@@ -53,6 +55,13 @@ class KtorNetworkService : RemoteDataSource {
     override suspend fun getMovies(page: Int): PaginatedResponse<MovieDto> {
         return client
             .get("discover/movie")
-            .body()
+            .body<PaginatedResponse<MovieDto>>()
+    }
+
+    override suspend fun getGenres(): List<GenreDto> {
+        return client
+            .get("genre/movie/list")
+            .body<GenresResponse>()
+            .genres
     }
 }
