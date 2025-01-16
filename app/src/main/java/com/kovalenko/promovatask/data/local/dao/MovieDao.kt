@@ -19,6 +19,9 @@ interface MovieDao {
     @Query("SELECT * FROM movies")
     fun getMoviesPaging(): PagingSource<Int, MovieEntity>
 
+    @Query("UPDATE movies SET isLiked = :isLiked WHERE id = :movieId")
+    suspend fun updateLikedStatus(movieId: Int, isLiked: Boolean)
+
     @Query("SELECT * FROM movies WHERE isLiked = 1")
     fun getLikedMovies(): Flow<List<MovieEntity>>
 
