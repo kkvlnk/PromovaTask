@@ -5,6 +5,7 @@ import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.map
+import com.kovalenko.promovatask.data.MoviesRemoteMediator
 import com.kovalenko.promovatask.data.local.LocalDataSource
 import com.kovalenko.promovatask.data.local.entity.MovieWithGenres
 import com.kovalenko.promovatask.data.mappers.toDomainModel
@@ -34,7 +35,10 @@ class MovieRepositoryImpl(
     override fun getMoviesPaging(): Flow<PagingData<Movie>> {
         return Pager(
             config = PagingConfig(pageSize = 65, enablePlaceholders = false),
-            remoteMediator = null, // TODO: Implement RemoteMediator
+            remoteMediator = MoviesRemoteMediator(
+                remoteDataSource,
+                localDataSource
+            ),
             pagingSourceFactory = { localDataSource.getMoviesPaging() }
         )
             .flow
