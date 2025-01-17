@@ -19,7 +19,7 @@ interface MovieDao {
     suspend fun getAllMovies(): List<MovieEntity>
 
     @Transaction
-    @Query("SELECT * FROM movies")
+    @Query("SELECT * FROM movies ORDER BY releaseDate DESC")
     fun getMoviesPaging(): PagingSource<Int, MovieWithGenres>
 
     @Query("UPDATE movies SET isLiked = :isLiked WHERE movieId = :movieId")
