@@ -24,4 +24,7 @@ class DatabaseModule {
 
     @Single
     fun provideGenreDao(database: AppDatabase) = database.genreDao()
+
+    @Single
+    fun provideMovieGenreDao(database: AppDatabase) = database.movieGenreDao()
 }
