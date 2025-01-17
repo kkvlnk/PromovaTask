@@ -1,5 +1,6 @@
 package com.kovalenko.promovatask.data.remote
 
+import com.kovalenko.promovatask.BuildConfig
 import com.kovalenko.promovatask.data.remote.model.GenreDto
 import com.kovalenko.promovatask.data.remote.model.GenresResponse
 import com.kovalenko.promovatask.data.remote.model.MovieDto
@@ -23,7 +24,7 @@ import org.koin.core.annotation.Single
 import timber.log.Timber
 
 // TODO: Move to BuildConfig
-private const val BaseUrl = "https://api.themoviedb.org/3/"
+private const val BaseUrl = BuildConfig.TMDB_BASE_URL
 
 @Single
 class KtorNetworkService : RemoteDataSource {
@@ -46,6 +47,7 @@ class KtorNetworkService : RemoteDataSource {
         }
         install(DefaultRequest) {
             header(HttpHeaders.ContentType, ContentType.Application.Json)
+            header(HttpHeaders.Authorization, "Bearer ${BuildConfig.TMDB_TOKEN}")
             url(BaseUrl)
         }
         install(HttpTimeout) {
