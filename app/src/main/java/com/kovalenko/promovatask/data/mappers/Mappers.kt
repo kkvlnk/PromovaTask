@@ -1,7 +1,9 @@
 package com.kovalenko.promovatask.data.mappers
 
 import com.kovalenko.promovatask.data.local.entity.GenreEntity
+import com.kovalenko.promovatask.data.local.entity.MovieEntity
 import com.kovalenko.promovatask.data.local.entity.MovieWithGenres
+import com.kovalenko.promovatask.data.remote.model.MovieDto
 import com.kovalenko.promovatask.domain.model.Genre
 import com.kovalenko.promovatask.domain.model.Movie
 
@@ -24,3 +26,19 @@ fun MovieWithGenres.toDomainModel() = Movie(
 )
 
 fun GenreEntity.toDomainModel() = Genre(id = genreId, name = name)
+
+fun MovieDto.toEntity() = MovieEntity(
+    adult = adult,
+    backdropPath = backdropPath,
+    movieId = id,
+    originalLanguage = originalLanguage,
+    originalTitle = originalTitle,
+    overview = overview,
+    popularity = popularity,
+    posterPath = posterPath,
+    releaseDate = releaseDate,
+    title = title,
+    video = video,
+    voteAverage = voteAverage,
+    voteCount = voteCount
+)
