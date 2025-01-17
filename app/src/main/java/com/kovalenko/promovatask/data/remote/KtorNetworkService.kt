@@ -10,7 +10,6 @@ import io.ktor.client.engine.cio.CIO
 import io.ktor.client.plugins.DefaultRequest
 import io.ktor.client.plugins.HttpTimeout
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
-import io.ktor.client.plugins.logging.DEFAULT
 import io.ktor.client.plugins.logging.LogLevel
 import io.ktor.client.plugins.logging.Logger
 import io.ktor.client.plugins.logging.Logging
@@ -21,9 +20,10 @@ import io.ktor.http.HttpHeaders
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
 import org.koin.core.annotation.Single
+import timber.log.Timber
 
 // TODO: Move to BuildConfig
-private const val BaseUrl = "https://api.themoviedb.org/3"
+private const val BaseUrl = "https://api.themoviedb.org/3/"
 
 @Single
 class KtorNetworkService : RemoteDataSource {
@@ -37,7 +37,11 @@ class KtorNetworkService : RemoteDataSource {
     private val client = HttpClient(CIO) {
         expectSuccess = true
         install(Logging) {
-            logger = Logger.DEFAULT
+            logger = object : Logger {
+                override fun log(message: String) {
+                    Timber.v("Ktor => $message")
+                }
+            }
             level = LogLevel.ALL
         }
         install(DefaultRequest) {
