@@ -30,7 +30,6 @@ class MoviesRemoteMediator(
             LoadType.PREPEND -> return MediatorResult.Success(endOfPaginationReached = true)
             LoadType.APPEND -> currentPage + 1
         }
-
         try {
             val response = remoteDataSource.getMovies(loadKey)
             val movies = response.results.map { it.toEntity() }
@@ -43,6 +42,7 @@ class MoviesRemoteMediator(
 
             localDataSource.saveMovieGenreCrossRefs(crossRefs)
             localDataSource.saveMovies(movies)
+            currentPage = loadKey
             return MediatorResult.Success(endOfPaginationReached = response.page == response.totalPages)
         } catch (e: Exception) {
             return MediatorResult.Error(e)
