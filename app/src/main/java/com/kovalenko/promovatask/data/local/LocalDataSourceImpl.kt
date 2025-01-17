@@ -3,8 +3,10 @@ package com.kovalenko.promovatask.data.local
 import androidx.paging.PagingSource
 import com.kovalenko.promovatask.data.local.dao.GenreDao
 import com.kovalenko.promovatask.data.local.dao.MovieDao
+import com.kovalenko.promovatask.data.local.dao.MovieGenreCrossRefDao
 import com.kovalenko.promovatask.data.local.entity.GenreEntity
 import com.kovalenko.promovatask.data.local.entity.MovieEntity
+import com.kovalenko.promovatask.data.local.entity.MovieGenreCrossRef
 import com.kovalenko.promovatask.data.local.entity.MovieWithGenres
 import kotlinx.coroutines.flow.Flow
 import org.koin.core.annotation.Single
@@ -12,7 +14,8 @@ import org.koin.core.annotation.Single
 @Single
 class LocalDataSourceImpl(
     private val movieDao: MovieDao,
-    private val genreDao: GenreDao
+    private val genreDao: GenreDao,
+    private val movieGenreCrossRefDao: MovieGenreCrossRefDao
 ): LocalDataSource {
     override suspend fun saveMovies(movies: List<MovieEntity>) {
         movieDao.insertMovies(movies)
@@ -32,5 +35,9 @@ class LocalDataSourceImpl(
 
     override suspend fun saveGenres(genres: List<GenreEntity>) {
         genreDao.insertGenres(genres)
+    }
+
+    override suspend fun saveMovieGenreCrossRefs(crossRefs: List<MovieGenreCrossRef>) {
+        movieGenreCrossRefDao.insertMovieGenreCrossRefs(crossRefs)
     }
 }
