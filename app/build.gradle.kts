@@ -18,6 +18,8 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        buildConfigField("String", "TMDB_TOKEN", "\"${System.getenv("TMDB_TOKEN")}\"")
+        buildConfigField("String", "TMDB_BASE_URL", "\"https://api.themoviedb.org/3/\"")
     }
 
     buildTypes {
