@@ -20,7 +20,7 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         buildConfigField("String", "TMDB_TOKEN", "\"${System.getenv("TMDB_TOKEN")}\"")
         buildConfigField("String", "TMDB_BASE_URL", "\"https://api.themoviedb.org/3/\"")
-        buildConfigField("String", "TMDB_IMAGE_BASE_URL", "\"http://image.tmdb.org/t/p/original/\"")
+        buildConfigField("String", "TMDB_IMAGE_BASE_URL", "\"https://image.tmdb.org/t/p/original\"")
     }
 
     buildTypes {
