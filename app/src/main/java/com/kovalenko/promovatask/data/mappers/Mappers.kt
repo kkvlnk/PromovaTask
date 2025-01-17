@@ -22,8 +22,8 @@ fun MovieWithGenres.toDomainModel() = Movie(
     title = movie.title,
     video = movie.video,
     voteAverage = movie.voteAverage,
-    voteCount = movie.voteCount
-
+    voteCount = movie.voteCount,
+    isLiked = movie.isLiked
 )
 
 fun GenreEntity.toDomainModel() = Genre(id = genreId, name = name)
