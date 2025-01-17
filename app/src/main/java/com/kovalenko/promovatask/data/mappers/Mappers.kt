@@ -1,5 +1,6 @@
 package com.kovalenko.promovatask.data.mappers
 
+import com.kovalenko.promovatask.BuildConfig
 import com.kovalenko.promovatask.data.local.entity.GenreEntity
 import com.kovalenko.promovatask.data.local.entity.MovieEntity
 import com.kovalenko.promovatask.data.local.entity.MovieWithGenres
@@ -29,13 +30,13 @@ fun GenreEntity.toDomainModel() = Genre(id = genreId, name = name)
 
 fun MovieDto.toEntity() = MovieEntity(
     adult = adult,
-    backdropPath = backdropPath,
+    backdropPath = BuildConfig.TMDB_IMAGE_BASE_URL + backdropPath,
     movieId = id,
     originalLanguage = originalLanguage,
     originalTitle = originalTitle,
     overview = overview,
     popularity = popularity,
-    posterPath = posterPath,
+    posterPath = BuildConfig.TMDB_IMAGE_BASE_URL + posterPath,
     releaseDate = releaseDate,
     title = title,
     video = video,
