@@ -20,10 +20,12 @@ import io.ktor.http.ContentType
 import io.ktor.http.HttpHeaders
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
+import org.koin.core.annotation.Single
 
 // TODO: Move to BuildConfig
 private const val BaseUrl = "https://api.themoviedb.org/3"
 
+@Single
 class KtorNetworkService : RemoteDataSource {
     private val json = Json {
         prettyPrint = true
