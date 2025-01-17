@@ -34,7 +34,12 @@ class MovieRepositoryImpl(
     @OptIn(ExperimentalPagingApi::class)
     override fun getMoviesPaging(): Flow<PagingData<Movie>> {
         return Pager(
-            config = PagingConfig(pageSize = 65, enablePlaceholders = false),
+            config = PagingConfig(
+                pageSize = 65,
+                initialLoadSize = 65,
+                enablePlaceholders = false,
+                prefetchDistance = 1
+            ),
             remoteMediator = MoviesRemoteMediator(
                 remoteDataSource,
                 localDataSource
