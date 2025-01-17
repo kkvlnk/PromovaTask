@@ -23,7 +23,6 @@ import kotlinx.serialization.json.Json
 import org.koin.core.annotation.Single
 import timber.log.Timber
 
-// TODO: Move to BuildConfig
 private const val BaseUrl = BuildConfig.TMDB_BASE_URL
 
 @Single
@@ -62,7 +61,9 @@ class KtorNetworkService : RemoteDataSource {
 
     override suspend fun getMovies(page: Int): PaginatedResponse<MovieDto> {
         return client
-            .get("discover/movie")
+            .get("discover/movie") {
+                url.parameters.append("page", page.toString())
+            }
             .body<PaginatedResponse<MovieDto>>()
     }
 
