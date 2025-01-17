@@ -3,6 +3,7 @@ package com.kovalenko.promovatask.data.local
 import androidx.paging.PagingSource
 import com.kovalenko.promovatask.data.local.dao.GenreDao
 import com.kovalenko.promovatask.data.local.dao.MovieDao
+import com.kovalenko.promovatask.data.local.entity.GenreEntity
 import com.kovalenko.promovatask.data.local.entity.MovieEntity
 import com.kovalenko.promovatask.data.local.entity.MovieWithGenres
 import kotlinx.coroutines.flow.Flow
@@ -27,5 +28,9 @@ class LocalDataSourceImpl(
 
     override fun getMoviesPaging(): PagingSource<Int, MovieWithGenres> {
         return movieDao.getMoviesPaging()
+    }
+
+    override suspend fun saveGenres(genres: List<GenreEntity>) {
+        genreDao.insertGenres(genres)
     }
 }
