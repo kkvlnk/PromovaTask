@@ -63,6 +63,9 @@ class KtorNetworkService : RemoteDataSource {
         return client
             .get("discover/movie") {
                 url.parameters.append("page", page.toString())
+                url.parameters.append("vote_average.gte", "7")
+                url.parameters.append("vote_count.gte", "100")
+                url.parameters.append("sort_by", "primary_release_date.desc")
             }
             .body<PaginatedResponse<MovieDto>>()
     }
