@@ -9,9 +9,8 @@ import kotlinx.serialization.json.Json
 data class MovieEntity(
     val adult: Boolean,
     val backdropPath: String?,
-    val genreIds: List<Int>,
     @PrimaryKey
-    val id: Int,
+    val movieId: Int,
     val originalLanguage: String,
     val originalTitle: String,
     val overview: String,

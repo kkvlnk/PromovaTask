@@ -8,8 +8,8 @@ data class MovieWithGenres(
     @Embedded
     val movie: MovieEntity,
     @Relation(
-        parentColumn = "id",
-        entityColumn = "id",
+        parentColumn = "movieId",
+        entityColumn = "genreId",
         associateBy = Junction(MovieGenreCrossRef::class)
     )
     val genres: List<GenreEntity>

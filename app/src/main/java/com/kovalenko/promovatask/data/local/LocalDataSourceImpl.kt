@@ -4,6 +4,7 @@ import androidx.paging.PagingSource
 import com.kovalenko.promovatask.data.local.dao.GenreDao
 import com.kovalenko.promovatask.data.local.dao.MovieDao
 import com.kovalenko.promovatask.data.local.entity.MovieEntity
+import com.kovalenko.promovatask.data.local.entity.MovieWithGenres
 import kotlinx.coroutines.flow.Flow
 import org.koin.core.annotation.Single
 
@@ -20,11 +21,11 @@ class LocalDataSourceImpl(
         movieDao.updateLikedStatus(movieId, liked)
     }
 
-    override fun getLikedMovies(): Flow<List<MovieEntity>> {
+    override fun getLikedMovies(): Flow<List<MovieWithGenres>> {
         return movieDao.getLikedMovies()
     }
 
-    override fun getMoviesPaging(): PagingSource<Int, MovieEntity> {
+    override fun getMoviesPaging(): PagingSource<Int, MovieWithGenres> {
         return movieDao.getMoviesPaging()
     }
 }

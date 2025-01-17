@@ -5,7 +5,9 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import androidx.room.Transaction
 import com.kovalenko.promovatask.data.local.entity.MovieEntity
+import com.kovalenko.promovatask.data.local.entity.MovieWithGenres
 import kotlinx.coroutines.flow.Flow
 
 @Dao
@@ -16,14 +18,16 @@ interface MovieDao {
     @Query("SELECT * FROM movies")
     suspend fun getAllMovies(): List<MovieEntity>
 
+    @Transaction
     @Query("SELECT * FROM movies")
-    fun getMoviesPaging(): PagingSource<Int, MovieEntity>
+    fun getMoviesPaging(): PagingSource<Int, MovieWithGenres>
 
-    @Query("UPDATE movies SET isLiked = :isLiked WHERE id = :movieId")
+    @Query("UPDATE movies SET isLiked = :isLiked WHERE movieId = :movieId")
     suspend fun updateLikedStatus(movieId: Int, isLiked: Boolean)
 
+    @Transaction
     @Query("SELECT * FROM movies WHERE isLiked = 1")
-    fun getLikedMovies(): Flow<List<MovieEntity>>
+    fun getLikedMovies(): Flow<List<MovieWithGenres>>
 
     @Query("DELETE FROM movies")
     suspend fun clearAll()
