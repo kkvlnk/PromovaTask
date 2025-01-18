@@ -1,11 +1,11 @@
 package com.kovalenko.promovatask.presentation.ui.components
 
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.FlowRowScope
+import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
@@ -14,20 +14,36 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.FavoriteBorder
+import androidx.compose.material.icons.rounded.Star
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconToggleButton
+import androidx.compose.material3.LocalMinimumInteractiveComponentSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil3.compose.AsyncImage
 import coil3.request.ImageRequest
 import coil3.request.crossfade
+import com.kovalenko.promovatask.R
+import com.kovalenko.promovatask.domain.model.Genre
 import com.kovalenko.promovatask.domain.model.Movie
+import com.kovalenko.promovatask.presentation.ui.theme.PromovaTaskTheme
+import java.util.Locale
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
@@ -45,6 +61,7 @@ fun MovieListItem(
             modifier = Modifier
                 .padding(12.dp)
                 .fillMaxWidth()
+                .height(intrinsicSize = IntrinsicSize.Min)
         ) {
             AsyncImage(
                 model = ImageRequest.Builder(LocalContext.current)
@@ -67,6 +84,18 @@ fun MovieListItem(
                     MovieChip(movie.releaseDate.substringBefore('-'))
                     movie.genres.forEach { MovieChip(it.name) }
                 }
+                Spacer(Modifier.weight(1f))
+                Row(
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    MovieVotesSection(voteAverage = movie.voteAverage, voteCount = movie.voteCount)
+                    MovieLikeButton(
+                        isLiked = movie.isLiked,
+                        toggleLiked = { setLikeStatus(movie.id, it) }
+                    )
+                }
             }
         }
     }
@@ -82,24 +111,106 @@ fun MovieChips(
         modifier = modifier,
         content = content,
         horizontalArrangement = Arrangement.spacedBy(6.dp),
-        verticalArrangement = Arrangement.spacedBy(12.dp)
+        verticalArrangement = Arrangement.spacedBy(8.dp)
     )
 }
 
 @Composable
-fun MovieChip(
-    text: String,
+fun MovieChip(text: String, modifier: Modifier = Modifier) {
+    Surface(
+        color = MaterialTheme.colorScheme.tertiary,
+        shape = RoundedCornerShape(25)
+    ) {
+        Text(
+            text = text,
+            style = MaterialTheme.typography.labelSmall.copy(
+                fontSize = 10.sp,
+                fontWeight = FontWeight.SemiBold
+            ),
+            modifier = modifier.padding(horizontal = 8.dp, vertical = 4.dp)
+        )
+    }
+}
+
+@Composable
+fun MovieVotesSection(
+    voteAverage: Double,
+    voteCount: Int,
+    modifier: Modifier = Modifier,
+) {
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(2.dp),
+        modifier = modifier
+    ) {
+        Text(
+            text = String.format(Locale.getDefault(), "%.1f", voteAverage),
+            style = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.SemiBold)
+        )
+        Icon(imageVector = Icons.Rounded.Star, contentDescription = null)
+        Text(
+            text = stringResource(
+                id = R.string.movie_vote_count_brackets,
+                formatArgs = arrayOf(voteCount),
+            ),
+            style = MaterialTheme.typography.labelSmall
+        )
+    }
+}
+
+@Composable
+fun MovieLikeButton(
+    isLiked: Boolean,
+    toggleLiked: (Boolean) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    Text(
-        text = text,
-        style = MaterialTheme.typography.labelSmall.copy(fontSize = 10.sp),
-        modifier = modifier
-            .border(
-                width = 1.dp,
-                shape = RoundedCornerShape(40),
-                color = MaterialTheme.colorScheme.secondary
+    CompositionLocalProvider(LocalMinimumInteractiveComponentSize provides 1.dp) {
+        IconToggleButton(
+            checked = isLiked,
+            onCheckedChange = toggleLiked,
+            modifier = modifier
+        ) {
+            when (isLiked) {
+                true -> Icon(
+                    imageVector = Icons.Filled.Favorite,
+                    contentDescription = null
+                )
+
+                false -> Icon(
+                    imageVector = Icons.Filled.FavoriteBorder,
+                    contentDescription = null
+                )
+            }
+        }
+    }
+}
+
+@Preview
+@Composable
+private fun MovieListItemPreview() {
+    PromovaTaskTheme {
+        MovieListItem(
+            movie = Movie(
+                adult = false,
+                backdropPath = "https://image.tmdb.org/t/p/original/uKb22E0nlzr914bA9KyA5CVCOlV.jpg",
+                genres = listOf(
+                    Genre(1, "Movie"),
+                    Genre(2, "Comedy"),
+                    Genre(3, "Thriller"),
+                ),
+                id = 1,
+                originalLanguage = "en",
+                originalTitle = "Some Movie 2: Return of the Boilerplate",
+                overview = "",
+                popularity = 8.45,
+                posterPath = "https://image.tmdb.org/t/p/original/uKb22E0nlzr914bA9KyA5CVCOlV.jpg",
+                releaseDate = "2024-12-29",
+                title = "Some Movie 2: Return of the Boilerplate",
+                video = false,
+                voteAverage = 8.45,
+                voteCount = 700,
+                isLiked = true
             )
-            .padding(horizontal = 8.dp, vertical = 4.dp)
-    )
+        ) { _, _ -> }
+    }
 }
