@@ -2,4 +2,5 @@
     <string name="app_name">PromovaTask</string>
     <string name="movies">Movies</string>
     <string name="favorites">Favorites</string>
+    <string name="movie_vote_count_brackets">(%1$d)</string>
 </resources>
