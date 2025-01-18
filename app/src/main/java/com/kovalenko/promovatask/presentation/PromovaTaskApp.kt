@@ -1,5 +1,6 @@
 package com.kovalenko.promovatask.presentation
 
+import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.List
@@ -45,7 +46,12 @@ fun PromovaTaskApp() {
                 }
             }
         ) { innerPadding ->
-            PromovaTaskNavHost(navController, Modifier.padding(innerPadding))
+            PromovaTaskNavHost(
+                navController,
+                Modifier
+                    .padding(innerPadding)
+                    .consumeWindowInsets(innerPadding)
+            )
         }
     }
 }
