@@ -1,6 +1,7 @@
 package com.kovalenko.promovatask.presentation.ui.screens
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Scaffold
@@ -12,6 +13,7 @@ import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.itemContentType
 import androidx.paging.compose.itemKey
 import com.kovalenko.promovatask.domain.model.Movie
+import com.kovalenko.promovatask.presentation.ui.components.MovieListItem
 import com.kovalenko.promovatask.presentation.viewmodel.MoviesAction
 import com.kovalenko.promovatask.presentation.viewmodel.MoviesViewModel
 import org.koin.androidx.compose.koinViewModel
@@ -37,8 +39,9 @@ fun MoviesScreen(
 ) {
     Scaffold(modifier = modifier) { innerPadding ->
         LazyColumn(
-            verticalArrangement = Arrangement.spacedBy(16.dp),
-            modifier = Modifier.padding(innerPadding)
+            verticalArrangement = Arrangement.spacedBy(12.dp),
+            modifier = Modifier.padding(innerPadding),
+            contentPadding = PaddingValues(horizontal = 16.dp, vertical = 24.dp)
         ) {
             items(
                 count = movies.itemCount,
@@ -47,7 +50,9 @@ fun MoviesScreen(
             ) { index ->
                 val movie = movies[index]
                 if (movie != null) {
-                    // TODO: Implement MovieItem
+                    MovieListItem(movie) { id, likeStatus ->
+                        performAction(MoviesAction.SetLikeStatus(id, likeStatus))
+                    }
                 }
             }
         }
