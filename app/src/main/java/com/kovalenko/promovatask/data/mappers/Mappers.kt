@@ -28,7 +28,7 @@ fun MovieWithGenres.toDomainModel() = Movie(
 
 fun GenreEntity.toDomainModel() = Genre(id = genreId, name = name)
 
-fun MovieDto.toEntity() = MovieEntity(
+fun MovieDto.toEntity(isLiked: Boolean = false) = MovieEntity(
     adult = adult,
     backdropPath = BuildConfig.TMDB_IMAGE_BASE_URL + backdropPath,
     movieId = id,
@@ -41,5 +41,6 @@ fun MovieDto.toEntity() = MovieEntity(
     title = title,
     video = video,
     voteAverage = voteAverage,
-    voteCount = voteCount
+    voteCount = voteCount,
+    isLiked = isLiked
 )
