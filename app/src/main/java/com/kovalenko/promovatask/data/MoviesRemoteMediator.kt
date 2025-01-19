@@ -32,7 +32,8 @@ class MoviesRemoteMediator(
         }
         try {
             val response = remoteDataSource.getMovies(loadKey)
-            val movies = response.results.map { it.toEntity() }
+            val likedIds = localDataSource.getLikedIds()
+            val movies = response.results.map { it.toEntity(isLiked = likedIds.contains(it.id)) }
 
             val crossRefs = response.results.flatMap { movieDto ->
                 movieDto.genreIds.map { genreId ->
