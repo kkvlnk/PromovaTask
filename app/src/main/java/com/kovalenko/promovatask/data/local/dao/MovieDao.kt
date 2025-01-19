@@ -28,6 +28,9 @@ interface MovieDao {
     @Query("SELECT * FROM movies WHERE isLiked = 1")
     fun getLikedMovies(): Flow<List<MovieWithGenres>>
 
+    @Query("SELECT movieId from movies WHERE isLiked = 1")
+    suspend fun getLikedIds(): List<Int>
+
     @Query("DELETE FROM movies")
     suspend fun clearAll()
 }
