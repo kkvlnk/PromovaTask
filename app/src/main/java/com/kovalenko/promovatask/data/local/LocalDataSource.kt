@@ -14,4 +14,5 @@ interface LocalDataSource {
     fun getMoviesPaging(): PagingSource<Int, MovieWithGenres>
     suspend fun saveGenres(genres: List<GenreEntity>)
     suspend fun saveMovieGenreCrossRefs(crossRefs: List<MovieGenreCrossRef>)
+    suspend fun getLikedIds(): List<Int>
 }

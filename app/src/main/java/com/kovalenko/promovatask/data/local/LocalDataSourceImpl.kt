@@ -40,4 +40,8 @@ class LocalDataSourceImpl(
     override suspend fun saveMovieGenreCrossRefs(crossRefs: List<MovieGenreCrossRef>) {
         movieGenreCrossRefDao.insertMovieGenreCrossRefs(crossRefs)
     }
+
+    override suspend fun getLikedIds(): List<Int> {
+        return movieDao.getLikedIds()
+    }
 }
