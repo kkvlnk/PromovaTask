@@ -1,6 +1,7 @@
 package com.kovalenko.promovatask.presentation.ui.components
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
@@ -18,6 +19,8 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.rounded.Star
+import androidx.compose.material3.Button
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconToggleButton
 import androidx.compose.material3.LocalMinimumInteractiveComponentSize
@@ -97,6 +100,36 @@ fun MovieListItem(
                     )
                 }
             }
+        }
+    }
+}
+
+@Composable
+fun MovieLoadingItem(modifier: Modifier = Modifier) {
+    Box(
+        modifier = modifier.fillMaxWidth(),
+        contentAlignment = Alignment.Center
+    ) {
+        CircularProgressIndicator(Modifier.padding(8.dp))
+    }
+}
+
+@Composable
+fun MovieErrorItem(
+    modifier: Modifier = Modifier,
+    retry: () -> Unit
+) {
+    Column(
+        modifier = modifier.fillMaxWidth(),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Text(
+            text = stringResource(R.string.loading_failed),
+            style = MaterialTheme.typography.bodyMedium
+        )
+        Spacer(Modifier.height(8.dp))
+        Button(onClick = retry) {
+            Text(text = stringResource(R.string.retry))
         }
     }
 }
