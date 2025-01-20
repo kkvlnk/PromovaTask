@@ -10,4 +10,5 @@ interface MovieRepository {
     fun getLikedMovies(): Flow<List<Movie>>
     fun getMoviesPaging(): Flow<PagingData<Movie>>
     suspend fun getGenres(refresh: Boolean): Result<List<Genre>>
+    suspend fun refreshGenres(): Result<Unit>
 }

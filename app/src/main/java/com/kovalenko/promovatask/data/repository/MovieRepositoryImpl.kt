@@ -54,16 +54,20 @@ class MovieRepositoryImpl(
             .map { pagingData -> pagingData.map(MovieWithGenres::toDomainModel) }
     }
 
+    override suspend fun refreshGenres(): Result<Unit> {
+        return runCatching {
+            remoteDataSource.getGenres()
+                .map(GenreDto::toEntity)
+                .let { localDataSource.saveGenres(it) }
+        }
+    }
+
     override suspend fun getGenres(refresh: Boolean): Result<List<Genre>> {
         return runCatching {
             if (refresh) {
-                remoteDataSource.getGenres()
-                    .map(GenreDto::toEntity)
-                    .apply { localDataSource.saveGenres(this) }
-
-            } else {
-                localDataSource.getGenres()
-            }.map(GenreEntity::toDomainModel)
+                refreshGenres().getOrThrow()
+            }
+            localDataSource.getGenres().map(GenreEntity::toDomainModel)
         }
     }
 }
