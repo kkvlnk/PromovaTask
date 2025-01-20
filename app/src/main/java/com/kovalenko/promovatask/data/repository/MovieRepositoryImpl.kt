@@ -70,4 +70,8 @@ class MovieRepositoryImpl(
             localDataSource.getGenres().map(GenreEntity::toDomainModel)
         }
     }
+
+    override fun observeGenres(): Flow<List<Genre>> {
+        return localDataSource.observeGenres().map { it.map(GenreEntity::toDomainModel) }
+    }
 }
