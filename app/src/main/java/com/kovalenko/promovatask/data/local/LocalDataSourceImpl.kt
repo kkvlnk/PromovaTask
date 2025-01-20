@@ -48,4 +48,8 @@ class LocalDataSourceImpl(
     override suspend fun getLikedIds(): List<Int> {
         return movieDao.getLikedIds()
     }
+
+    override fun observeGenres(): Flow<List<GenreEntity>> {
+        return genreDao.observeGenres()
+    }
 }
