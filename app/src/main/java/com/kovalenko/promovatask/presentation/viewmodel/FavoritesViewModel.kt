@@ -45,7 +45,12 @@ class FavoritesViewModel(
     fun performAction(action: LikedMoviesAction) {
         when (action) {
             is LikedMoviesAction.SetLikeStatus -> setLikeStatus(action.id, action.status)
+            LikedMoviesAction.DismissMessage -> dismissMessage()
         }
+    }
+
+    private fun dismissMessage() {
+        _errorMessage.update { null }
     }
 
     private fun setLikeStatus(id: Int, status: Boolean) {
@@ -66,4 +71,5 @@ data class LikedMoviesUiState(
 
 sealed class LikedMoviesAction {
     data class SetLikeStatus(val id: Int, val status: Boolean) : LikedMoviesAction()
+    data object DismissMessage : LikedMoviesAction()
 }
