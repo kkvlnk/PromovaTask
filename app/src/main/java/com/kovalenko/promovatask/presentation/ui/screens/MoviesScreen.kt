@@ -101,9 +101,9 @@ fun MoviesScreen(
                 )
 
                 is MoviesScreenUiState.Error -> ErrorContent(
-                    text = when (val message = uiState.errorMessage) {
-                        is ErrorMessage.ResourceMessage -> stringResource(message.message)
-                        is ErrorMessage.StringMessage -> message.message
+                    text = when (val errorMessage = uiState.errorMessage) {
+                        is ErrorMessage.ResourceMessage -> stringResource(errorMessage.message)
+                        is ErrorMessage.StringMessage -> errorMessage.message
                         null -> stringResource(R.string.error_unknown)
                     }
                 )
