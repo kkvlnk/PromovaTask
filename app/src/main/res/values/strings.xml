@@ -3,4 +3,7 @@
     <string name="movies">Movies</string>
     <string name="favorites">Favorites</string>
     <string name="movie_vote_count_brackets">(%1$d)</string>
+    <string name="empty_genres_message">Movie genres unavailable</string>
+    <string name="refresh">Refresh</string>
+    <string name="error_unknown">Unknown error</string>
 </resources>
