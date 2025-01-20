@@ -7,9 +7,13 @@ import androidx.paging.PagingData
 import androidx.paging.map
 import com.kovalenko.promovatask.data.MoviesRemoteMediator
 import com.kovalenko.promovatask.data.local.LocalDataSource
+import com.kovalenko.promovatask.data.local.entity.GenreEntity
 import com.kovalenko.promovatask.data.local.entity.MovieWithGenres
 import com.kovalenko.promovatask.data.mappers.toDomainModel
+import com.kovalenko.promovatask.data.mappers.toEntity
 import com.kovalenko.promovatask.data.remote.RemoteDataSource
+import com.kovalenko.promovatask.data.remote.model.GenreDto
+import com.kovalenko.promovatask.domain.model.Genre
 import com.kovalenko.promovatask.domain.model.Movie
 import com.kovalenko.promovatask.domain.repository.MovieRepository
 import kotlinx.coroutines.flow.Flow
@@ -48,5 +52,18 @@ class MovieRepositoryImpl(
         )
             .flow
             .map { pagingData -> pagingData.map(MovieWithGenres::toDomainModel) }
+    }
+
+    override suspend fun getGenres(refresh: Boolean): Result<List<Genre>> {
+        return runCatching {
+            if (refresh) {
+                remoteDataSource.getGenres()
+                    .map(GenreDto::toEntity)
+                    .apply { localDataSource.saveGenres(this) }
+
+            } else {
+                localDataSource.getGenres()
+            }.map(GenreEntity::toDomainModel)
+        }
     }
 }
