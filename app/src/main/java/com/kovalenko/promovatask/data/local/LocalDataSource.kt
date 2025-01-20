@@ -13,6 +13,7 @@ interface LocalDataSource {
     fun getLikedMovies(): Flow<List<MovieWithGenres>>
     fun getMoviesPaging(): PagingSource<Int, MovieWithGenres>
     suspend fun saveGenres(genres: List<GenreEntity>)
+    suspend fun getGenres(): List<GenreEntity>
     suspend fun saveMovieGenreCrossRefs(crossRefs: List<MovieGenreCrossRef>)
     suspend fun getLikedIds(): List<Int>
 }

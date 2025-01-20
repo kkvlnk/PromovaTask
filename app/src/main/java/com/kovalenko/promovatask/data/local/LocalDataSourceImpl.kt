@@ -37,6 +37,10 @@ class LocalDataSourceImpl(
         genreDao.insertGenres(genres)
     }
 
+    override suspend fun getGenres(): List<GenreEntity> {
+        return genreDao.getGenres()
+    }
+
     override suspend fun saveMovieGenreCrossRefs(crossRefs: List<MovieGenreCrossRef>) {
         movieGenreCrossRefDao.insertMovieGenreCrossRefs(crossRefs)
     }
