@@ -4,6 +4,7 @@ import com.kovalenko.promovatask.BuildConfig
 import com.kovalenko.promovatask.data.local.entity.GenreEntity
 import com.kovalenko.promovatask.data.local.entity.MovieEntity
 import com.kovalenko.promovatask.data.local.entity.MovieWithGenres
+import com.kovalenko.promovatask.data.remote.model.GenreDto
 import com.kovalenko.promovatask.data.remote.model.MovieDto
 import com.kovalenko.promovatask.domain.model.Genre
 import com.kovalenko.promovatask.domain.model.Movie
@@ -26,6 +27,7 @@ fun MovieWithGenres.toDomainModel() = Movie(
     isLiked = movie.isLiked
 )
 
+fun GenreDto.toEntity() = GenreEntity(genreId = id, name = name)
 fun GenreEntity.toDomainModel() = Genre(id = genreId, name = name)
 
 fun MovieDto.toEntity(isLiked: Boolean = false) = MovieEntity(
