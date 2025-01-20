@@ -13,7 +13,6 @@ import com.kovalenko.promovatask.domain.usecase.SetMovieLikeStatusUseCase
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -73,6 +72,7 @@ class MoviesViewModel(
         when (action) {
             is MoviesAction.SetLikeStatus -> setLikeStatus(action.id, action.status)
             MoviesAction.RefreshGenres -> refreshGenres()
+            MoviesAction.DismissMessage -> dismissMessage()
         }
     }
 
@@ -90,10 +90,17 @@ class MoviesViewModel(
     private fun setLikeStatus(id: Int, status: Boolean) {
         viewModelScope.launch {
             setLikeStatusUseCase(movieId = id, liked = status)
+                .onSuccess {
+                    _errorMessage.update { ErrorMessage.ResourceMessage(R.string.error_unknown) }
+                }
                 .onFailure {
                     _errorMessage.update { ErrorMessage.ResourceMessage(R.string.error_unknown) }
                 }
         }
+    }
+
+    private fun dismissMessage() {
+        _errorMessage.update { null }
     }
 }
 
@@ -111,4 +118,5 @@ sealed class MoviesScreenUiState {
 sealed class MoviesAction {
     data class SetLikeStatus(val id: Int, val status: Boolean) : MoviesAction()
     data object RefreshGenres: MoviesAction()
+    data object DismissMessage: MoviesAction()
 }

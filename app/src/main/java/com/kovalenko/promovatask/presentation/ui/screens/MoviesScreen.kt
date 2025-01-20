@@ -13,9 +13,13 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -60,7 +64,32 @@ fun MoviesScreen(
     movies: LazyPagingItems<Movie>,
     modifier: Modifier
 ) {
-    Scaffold(modifier = modifier) { innerPadding ->
+    val snackbarHostState = remember { SnackbarHostState() }
+
+    val message: String? = when(uiState) {
+        MoviesScreenUiState.EmptyGenres -> null
+        MoviesScreenUiState.Loading -> null
+        is MoviesScreenUiState.Error -> null
+        is MoviesScreenUiState.Movies -> {
+            when (val error = uiState.errorMessage) {
+                is ErrorMessage.ResourceMessage -> stringResource(error.message)
+                is ErrorMessage.StringMessage -> error.message
+                null -> null
+            }
+        }
+    }
+
+    LaunchedEffect(snackbarHostState, message) {
+        if (message != null) {
+            snackbarHostState.showSnackbar(message = message, withDismissAction = true)
+            performAction(MoviesAction.DismissMessage)
+        }
+    }
+
+    Scaffold(
+        modifier = modifier,
+        snackbarHost = { SnackbarHost(hostState = snackbarHostState) }
+    ) { innerPadding ->
         Box(Modifier.padding(innerPadding)) {
             when (uiState) {
                 MoviesScreenUiState.Loading -> LoadingContent()
