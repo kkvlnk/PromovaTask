@@ -90,9 +90,6 @@ class MoviesViewModel(
     private fun setLikeStatus(id: Int, status: Boolean) {
         viewModelScope.launch {
             setLikeStatusUseCase(movieId = id, liked = status)
-                .onSuccess {
-                    _errorMessage.update { ErrorMessage.ResourceMessage(R.string.error_unknown) }
-                }
                 .onFailure {
                     _errorMessage.update { ErrorMessage.ResourceMessage(R.string.error_unknown) }
                 }
