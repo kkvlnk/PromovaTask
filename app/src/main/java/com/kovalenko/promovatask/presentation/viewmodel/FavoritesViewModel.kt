@@ -10,7 +10,6 @@ import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -28,10 +27,10 @@ class FavoritesViewModel(
     private val _isLoading: MutableStateFlow<Boolean> = MutableStateFlow(false)
     private val _errorMessage: MutableStateFlow<ErrorMessage?> = MutableStateFlow(null)
 
-    val uiState: StateFlow<LikedMoviesUiState> = combine(
+    val uiState: StateFlow<FavoritesUiState> = combine(
         _movies, _isLoading, _errorMessage
     ) { movies, isLoading, errorMessage ->
-        LikedMoviesUiState(
+        FavoritesUiState(
             movies = movies.toImmutableList(),
             errorMessage = errorMessage,
             isLoading = isLoading
@@ -39,13 +38,13 @@ class FavoritesViewModel(
     }.stateIn(
         scope = viewModelScope,
         started = WhileUiSubscribed,
-        initialValue = LikedMoviesUiState()
+        initialValue = FavoritesUiState()
     )
 
-    fun performAction(action: LikedMoviesAction) {
+    fun performAction(action: FavoritesAction) {
         when (action) {
-            is LikedMoviesAction.SetLikeStatus -> setLikeStatus(action.id, action.status)
-            LikedMoviesAction.DismissMessage -> dismissMessage()
+            is FavoritesAction.SetLikeStatus -> setLikeStatus(action.id, action.status)
+            FavoritesAction.DismissMessage -> dismissMessage()
         }
     }
 
@@ -63,13 +62,13 @@ class FavoritesViewModel(
     }
 }
 
-data class LikedMoviesUiState(
+data class FavoritesUiState(
     val movies: ImmutableList<Movie> = persistentListOf(),
     val errorMessage: ErrorMessage? = null,
     val isLoading: Boolean = false
 )
 
-sealed class LikedMoviesAction {
-    data class SetLikeStatus(val id: Int, val status: Boolean) : LikedMoviesAction()
-    data object DismissMessage : LikedMoviesAction()
+sealed class FavoritesAction {
+    data class SetLikeStatus(val id: Int, val status: Boolean) : FavoritesAction()
+    data object DismissMessage : FavoritesAction()
 }
