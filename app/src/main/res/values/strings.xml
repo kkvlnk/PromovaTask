@@ -6,4 +6,6 @@
     <string name="empty_genres_message">Movie genres unavailable</string>
     <string name="refresh">Refresh</string>
     <string name="error_unknown">Unknown error</string>
+    <string name="retry">Retry</string>
+    <string name="loading_failed">Loading failed</string>
 </resources>
