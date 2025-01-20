@@ -5,7 +5,7 @@ import com.kovalenko.promovatask.domain.model.Movie
 import kotlinx.coroutines.flow.Flow
 
 interface MovieRepository {
-    suspend fun updateLikedStatus(movieId: Int, liked: Boolean)
+    suspend fun updateLikedStatus(movieId: Int, liked: Boolean): Result<Unit>
     fun getLikedMovies(): Flow<List<Movie>>
     fun getMoviesPaging(): Flow<PagingData<Movie>>
 }

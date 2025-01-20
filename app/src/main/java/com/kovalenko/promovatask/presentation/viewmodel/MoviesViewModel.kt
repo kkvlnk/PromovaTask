@@ -23,7 +23,9 @@ class MoviesViewModel(
 
     private fun setLikeStatus(id: Int, status: Boolean) {
         viewModelScope.launch {
-            setLikeStatusUseCase(id, status)
+            setLikeStatusUseCase(id, status).onFailure {
+                // TODO: Handle error
+            }
         }
     }
 }

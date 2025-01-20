@@ -5,7 +5,7 @@ import org.koin.core.annotation.Factory
 
 @Factory
 class SetMovieLikeStatusUseCase(private val repository: MovieRepository) {
-    suspend operator fun invoke(movieId: Int, liked: Boolean) {
-        repository.updateLikedStatus(movieId = movieId, liked = liked)
+    suspend operator fun invoke(movieId: Int, liked: Boolean): Result<Unit> {
+        return repository.updateLikedStatus(movieId = movieId, liked = liked)
     }
 }

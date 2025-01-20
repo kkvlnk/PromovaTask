@@ -21,8 +21,8 @@ class MovieRepositoryImpl(
     private val localDataSource: LocalDataSource,
     private val remoteDataSource: RemoteDataSource
 ) : MovieRepository {
-    override suspend fun updateLikedStatus(movieId: Int, liked: Boolean) {
-        localDataSource.updateLikedStatus(movieId, liked)
+    override suspend fun updateLikedStatus(movieId: Int, liked: Boolean): Result<Unit> {
+        return runCatching { localDataSource.updateLikedStatus(movieId, liked) }
     }
 
     override fun getLikedMovies(): Flow<List<Movie>> {
