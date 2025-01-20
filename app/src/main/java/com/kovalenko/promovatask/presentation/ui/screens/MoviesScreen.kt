@@ -11,11 +11,13 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
+import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -66,7 +68,7 @@ fun MoviesScreen(
 ) {
     val snackbarHostState = remember { SnackbarHostState() }
 
-    val message: String? = when(uiState) {
+    val message: String? = when (uiState) {
         MoviesScreenUiState.EmptyGenres -> null
         MoviesScreenUiState.Loading -> null
         is MoviesScreenUiState.Error -> null
@@ -117,6 +119,7 @@ fun MoviesScreen(
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MoviesContent(
     movies: LazyPagingItems<Movie>,
@@ -126,26 +129,31 @@ fun MoviesContent(
     if (movies.loadState.refresh is LoadState.Loading && movies.itemCount == 0) {
         LoadingContent()
     } else {
-        LazyColumn(
-            verticalArrangement = Arrangement.spacedBy(12.dp),
-            modifier = modifier,
-            contentPadding = PaddingValues(horizontal = 16.dp, vertical = 24.dp)
+        PullToRefreshBox(
+            isRefreshing = movies.loadState.refresh is LoadState.Loading,
+            onRefresh = { movies.refresh() }
         ) {
-            items(
-                count = movies.itemCount,
-                key = movies.itemKey(key = { it.id }),
-                contentType = movies.itemContentType()
-            ) { index ->
-                val movie = movies[index]
-                if (movie != null) {
-                    MovieListItem(movie, setLikeStatus = setLikeStatus)
+            LazyColumn(
+                verticalArrangement = Arrangement.spacedBy(12.dp),
+                modifier = modifier,
+                contentPadding = PaddingValues(horizontal = 16.dp, vertical = 24.dp)
+            ) {
+                items(
+                    count = movies.itemCount,
+                    key = movies.itemKey(key = { it.id }),
+                    contentType = movies.itemContentType()
+                ) { index ->
+                    val movie = movies[index]
+                    if (movie != null) {
+                        MovieListItem(movie, setLikeStatus = setLikeStatus)
+                    }
                 }
-            }
 
-            when (movies.loadState.append) {
-                is LoadState.Error -> item { MovieErrorItem(retry = movies::retry) }
-                LoadState.Loading -> item { MovieLoadingItem() }
-                else -> Unit
+                when (movies.loadState.append) {
+                    is LoadState.Error -> item { MovieErrorItem(retry = movies::retry) }
+                    LoadState.Loading -> item { MovieLoadingItem() }
+                    else -> Unit
+                }
             }
         }
     }
