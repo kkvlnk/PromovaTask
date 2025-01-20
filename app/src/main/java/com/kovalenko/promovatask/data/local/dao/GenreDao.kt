@@ -12,7 +12,7 @@ interface GenreDao {
     suspend fun insertGenres(genres: List<GenreEntity>)
 
     @Query("SELECT * FROM genres")
-    suspend fun getAllGenres(): List<GenreEntity>
+    suspend fun getGenres(): List<GenreEntity>
 
     @Query("DELETE FROM genres")
     suspend fun clearAll()
